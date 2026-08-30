@@ -1,8 +1,7 @@
 from Map.Adjacency_list_map import MapGraph
 from Queue.linked_queue import LinkedQueue
 # If we use adjacency list, then the time comp is O(V+E)
-# If we use adjacency matrix, then the time comp is O(V^2)
-
+#Space Complexity: O(V)
 def bfs(graph, start_key):
     if start_key not in graph.vertices:
         return []
@@ -15,7 +14,6 @@ def bfs(graph, start_key):
     visited.add(start_key)
     queue.append(start_vertex)
     #list: O(V)
-    #matrix: O(v * V) = O(V^2)
     while not queue.is_empty():
         current_vertex = queue.serve()
         order.append(current_vertex.key)
