@@ -1,14 +1,11 @@
-from wsgiref.validate import header_re
-
-
 class LinkedListNode:
     def __init__(self, data):
-        self.data = data;
+        self.data = data
         self.next = None
 
 class LinkedList:
     def __init__(self):
-        self.head = head
+        self.head = None
         self.tail = None
         self.size = 0
 
@@ -50,7 +47,7 @@ class Vertex:
         return str(self.key)
 
 class Edge:
-    def __init__(self, from_vertex, to_vertex, weight):
+    def __init__(self, from_vertex, to_vertex, weight=1):
         self.from_vertex = from_vertex
         self.to_vertex = to_vertex
         self.weight = weight
@@ -82,7 +79,7 @@ class MapGraph:
 
         if not self.directed:
             reverse_edge = Edge(to_vertex, from_vertex, weight)
-            to_vertex.add(reverse_edge)
+            to_vertex.add_edge(reverse_edge)
 
     def get_neighbours(self, key):
         vertex = self.get_vertex(key)
@@ -104,6 +101,6 @@ class MapGraph:
             print(f"{vertex}: ", end = "")
 
             for edge in vertex.edges:
-                print("f{edge.to_vertex}({edge.weight})", end = "")
+                print(f"{edge.to_vertex}({edge.weight})", end = "")
 
             print()

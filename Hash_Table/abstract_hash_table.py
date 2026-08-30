@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, Tuple
-from data_structures.referential_array import ArrayR
+from referential_array import ArrayR
 
 K = TypeVar('K')
 V = TypeVar('V')

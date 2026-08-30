@@ -1,5 +1,5 @@
-from data_structures.abstract_list import List, T
-from data_structures.node import Node
+from List.abstract_list import List, T
+from List.node import Node
 
 class LinkedListIterator:
     """ Iterator for LinkedList. """
@@ -33,6 +33,9 @@ class LinkedList(List[T]):
             Best: O(1) if adding to the beginning or end of the list.
             Worst: O(N) where N is the number of items in the list. Occurs when inserting towards the end of the list (but not at the end).
         """
+        if index < 0 or index > len(self):
+            raise IndexError("Index out of bounds")
+
         if index == len(self):
             self.append(item)
         else:
@@ -73,7 +76,10 @@ class LinkedList(List[T]):
             Best: O(1) Deleting the first item in the list.
             Worst: O(N) Deleting the last item in the list, where N is the number of items in the list.
         """
-        if not self.is_empty():
+        if -1 * len(self) <= index < len(self):
+            if index < 0:
+                index = len(self) + index
+
             if index > 0:
                 previous_node = self.__get_node_at_index(index-1)
                 item = previous_node.link.item
@@ -91,7 +97,7 @@ class LinkedList(List[T]):
             self._length -= 1
             return item
         else:
-            raise ValueError("Index out of bounds: list is empty")
+            raise IndexError("Index out of bounds")
 
     def index(self, item: T) -> int:
         """

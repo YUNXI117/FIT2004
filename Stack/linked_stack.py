@@ -1,5 +1,5 @@
-from data_structures.node import Node
-from data_structures.abstract_stack import Stack, T
+from Stack.node import Node
+from Stack.abstract_stack import Stack, T
 
 class LinkedStack(Stack[T]):
     """ Implementation of a stack with linked nodes. """

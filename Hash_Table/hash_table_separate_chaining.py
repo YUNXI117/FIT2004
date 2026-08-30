@@ -1,6 +1,6 @@
-from data_structures.abstract_hash_table import HashTable, V
-from data_structures.referential_array import ArrayR
-from data_structures.linked_list import LinkedList
+from Hash_Table.abstract_hash_table import HashTable, V
+from referential_array import ArrayR
+from List.linked_list import LinkedList
 from typing import Tuple
 
 class HashTableSeparateChaining(HashTable[str, V]):
@@ -38,6 +38,9 @@ class HashTableSeparateChaining(HashTable[str, V]):
         :returns: a valid position (0 <= value < table_size) in the hash table
         :complexity: O(K) where K is the length of the key
         """
+        if len(self._table) == 1:
+            return 0
+
         value = 0
         a = 31415
         for char in key:
@@ -47,7 +50,7 @@ class HashTableSeparateChaining(HashTable[str, V]):
 
     @property
     def table_size(self) -> int:
-        return len(self.__array)
+        return len(self._table)
 
     def items(self) -> ArrayR[Tuple[str, V]]:
         """
@@ -78,7 +81,7 @@ class HashTableSeparateChaining(HashTable[str, V]):
         Returns whether the hash table is full
         :complexity: O(1)
         """
-        return len(self) == len(self.__array)
+        return False
 
     def __delitem__(self, key: str) -> None:
         """

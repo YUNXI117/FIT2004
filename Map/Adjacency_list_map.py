@@ -59,7 +59,7 @@ class MapGraph:
         for edge in vertex.edges:
             neighbours.append(edge.to_vertex)
 
-        return vertex.neighbours
+        return neighbours
 
     def get_edges(self, key):
         vertex = self.get_vertex(key)

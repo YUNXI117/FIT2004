@@ -1,5 +1,5 @@
-from data_structures.abstract_stack import Stack
-from data_structures.referential_array import ArrayR, T
+from Stack.abstract_stack import Stack, T
+from referential_array import ArrayR
 
 
 class ArrayStack(Stack[T]):

@@ -1,6 +1,6 @@
 from __future__ import annotations
-from data_structures.abstract_set import Set, T
-from data_structures.referential_array import ArrayR
+from Set.abstract_set import Set, T
+from referential_array import ArrayR
 
 
 class ArraySet(Set[T]):

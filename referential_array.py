@@ -22,8 +22,8 @@ __docformat__ = 'reStructuredText'
 
 from ctypes import py_object
 from typing import Generic, TypeVar
-from data_structures.abstract_list import List
-from data_structures.abstract_sorted_list import SortedList
+from List.abstract_list import List
+from List.abstract_sorted_list import SortedList
 
 T = TypeVar('T')
 

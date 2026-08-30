@@ -8,12 +8,12 @@ from __future__ import annotations
 __author__ = 'Brendon Taylor, modified by Alexey Ignatiev, further modified by Jackson Goerner'
 __docformat__ = 'reStructuredText'
 
-from typing import Tuple
+from typing import Generic, Tuple
 
-from data_structures.abstract_binary_search_tree import AbstractBinarySearchTree, K, V
-from data_structures.linked_stack import LinkedStack
-from data_structures.node_binary import BinaryNode, Generic
-from data_structures.referential_array import ArrayR
+from Tree.abstract_binary_search_tree import AbstractBinarySearchTree, K, V
+from Stack.linked_stack import LinkedStack
+from List.node_binary import BinaryNode
+from referential_array import ArrayR
 
 class BSTPreOrderIterator(Generic[K,V]):
     """ Pre-order iterator for the binary search tree.

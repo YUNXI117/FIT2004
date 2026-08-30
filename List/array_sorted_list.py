@@ -1,5 +1,5 @@
-from data_structures.referential_array import ArrayR
-from data_structures.abstract_sorted_list import SortedList, T
+from referential_array import ArrayR
+from List.abstract_sorted_list import SortedList, T
 
 __author__ = 'Maria Garcia de la Banda and Brendon Taylor. Modified by Alexey Ignatiev'
 __docformat__ = 'reStructuredText'
@@ -93,7 +93,7 @@ class ArraySortedList(SortedList[T]):
         """
         item = self[index]
         self._length -= 1
-        self._shuffle_left(index)
+        self.__shuffle_left(index)
         return item
 
     def index(self, item: T) -> int:

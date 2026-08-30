@@ -1,6 +1,6 @@
 from __future__ import annotations
-from data_structures.referential_array import ArrayR
-from data_structures.abstract_heap import AbstractHeap, T
+from referential_array import ArrayR
+from Heap.abstract_heap import AbstractHeap, T
 from typing import Iterable
 
 

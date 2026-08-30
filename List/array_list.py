@@ -1,7 +1,5 @@
-from data_structures.abstract_list import *
-from data_structures.referential_array import ArrayR
-
-from List.abstract_list import List
+from List.abstract_list import List, T
+from referential_array import ArrayR
 
 
 class ArrayList(List[T]):

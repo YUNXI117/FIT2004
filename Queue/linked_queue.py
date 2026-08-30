@@ -1,5 +1,5 @@
-from data_structures.node import Node
-from data_structures.abstract_queue import Queue, T
+from Queue.node import Node
+from Queue.abstract_queue import Queue, T
 
 class LinkedQueue(Queue[T]):
     """ Linked Queue
