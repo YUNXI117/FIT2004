@@ -31,6 +31,40 @@ def bfs(graph, start_key):
     return order
 
 
+# Shortest distance with BFS
+# Only works for unweighted graphs, or graphs where every edge has the same cost.
+#
+# Time Complexity: O(V + E)
+# Input Space: O(V + E)
+# Auxiliary Space: O(V)
+# Total Space: O(V + E)
+def bfs_shortest_distance(graph, start_key):
+    if start_key not in graph.vertices:
+        return {}
+
+    visited = set()
+    queue = LinkedQueue()
+    distance = {}
+
+    start_vertex = graph.vertices[start_key]
+    visited.add(start_key)
+    distance[start_key] = 0
+    queue.append(start_vertex)
+
+    while not queue.is_empty():
+        current_vertex = queue.serve()
+
+        for edge in current_vertex.edges:
+            neighbour = edge.to_vertex
+
+            if neighbour.key not in visited:
+                visited.add(neighbour.key)
+                distance[neighbour.key] = distance[current_vertex.key] + 1
+                queue.append(neighbour)
+
+    return distance
+
+
 if __name__ == "__main__":
     graph = MapGraph(directed=False)
 
@@ -41,3 +75,4 @@ if __name__ == "__main__":
     graph.add_edge("D", "F")
 
     print(bfs(graph, "A"))
+    print(bfs_shortest_distance(graph, "A"))
