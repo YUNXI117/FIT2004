@@ -1,14 +1,17 @@
-from Map.Adjacency_list_map import MapGraph
+from Graph.Adjacency_list_map import MapGraph
 from Queue.linked_queue import LinkedQueue
 # If we use adjacency list, then the time comp is O(V+E)
-#Space Complexity: O(V)
+
+#Input Space: O(E + V)
+#Auxiliary Space Space:O(V)
+#Total Space:O(V + E)
 def bfs(graph, start_key):
     if start_key not in graph.vertices:
         return []
 
-    visited = set()
-    queue = LinkedQueue()
-    order = []
+    visited = set() #AXU Space : O(V)
+    queue = LinkedQueue() #AXU Space : O(V)
+    order = [] #AXU Space: O(V)
 
     start_vertex = graph.vertices[start_key]
     visited.add(start_key)

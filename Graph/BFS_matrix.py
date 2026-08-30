@@ -1,6 +1,9 @@
 from Queue.linked_queue import LinkedQueue
 # If we use adjacency matrix, then the time comp is O(V^2)
-#Space Complexity: O(V)
+
+#Input space: O(V^2)
+#Aux space: O(V)
+#Total space: O(V^2)
 def bfs_matrix(graph, start_key):
     if start_key not in graph.index_map:
         return []
