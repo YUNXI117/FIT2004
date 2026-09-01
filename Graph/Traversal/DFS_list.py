@@ -1,4 +1,11 @@
-from Graph.Adjacency_list_map import MapGraph
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.append(str(PROJECT_ROOT))
+
+from Graph.Representation.Adjacency_list_map import MapGraph
 from Stack.linked_stack import LinkedStack
 
 
@@ -11,6 +18,7 @@ from Stack.linked_stack import LinkedStack
 #   The graph stores vertices and adjacency lists.
 #
 # Auxiliary Space: O(V)
+#   discovered stores at most V vertices.
 #   visited stores at most V vertices.
 #   stack stores at most V vertices.
 #   order stores at most V vertices.
@@ -20,23 +28,32 @@ def dfs(graph, start_key):
     if start_key not in graph.vertices:
         return []
 
+    discovered = set()
     visited = set()
     stack = LinkedStack()
     order = []
 
     start_vertex = graph.vertices[start_key]
-    visited.add(start_key)
+    discovered.add(start_key)
     stack.push(start_vertex)
 
     while not stack.is_empty():
         current_vertex = stack.pop()
-        order.append(current_vertex.key)
+        current_key = current_vertex.key
+
+        discovered.discard(current_key)
+
+        if current_key in visited:
+            continue
+
+        visited.add(current_key)
+        order.append(current_key)
 
         for edge in reversed(current_vertex.edges):
             neighbour = edge.to_vertex
 
-            if neighbour.key not in visited:
-                visited.add(neighbour.key)
+            if neighbour.key not in discovered and neighbour.key not in visited:
+                discovered.add(neighbour.key)
                 stack.push(neighbour)
 
     return order
