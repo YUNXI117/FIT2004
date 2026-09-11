@@ -27,6 +27,8 @@ from Queue.linked_queue import LinkedQueue
 #   order stores at most V vertex keys.
 #
 # Total Space: O(V + E)
+
+#https://www.geeksforgeeks.org/dsa/topological-sorting-indegree-based-solution/
 def kahn_topological_sort(graph):
     if not graph.directed:
         raise ValueError("Kahn's algorithm only works on directed graphs.")

@@ -6,6 +6,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.append(str(PROJECT_ROOT))
 
 from Graph.Representation.Adjacency_list_map import MapGraph
+from Stack.linked_stack import LinkedStack
 
 
 # DFS modification with adjacency list
@@ -22,9 +23,12 @@ from Graph.Representation.Adjacency_list_map import MapGraph
 # Auxiliary Space: O(V)
 #   state stores one mark per vertex.
 #   recursion stack can contain at most V vertices.
-#   order stores at most V vertex keys.
+#   topological_stack stores at most V vertex keys.
+#   order stores the final topological order.
 #
 # Total Space: O(V + E)
+
+#https://www.geeksforgeeks.org/dsa/topological-sort-using-dfs/
 def dfs_topological_sort(graph):
     if not graph.directed:
         raise ValueError("DFS topological sort only works on directed graphs.")
@@ -34,7 +38,7 @@ def dfs_topological_sort(graph):
     for key in graph.vertices:
         state[key] = "unvisited"
 
-    order = []
+    topological_stack = LinkedStack()
 
     def dfs_visit(vertex):
         state[vertex.key] = "visiting"
@@ -49,13 +53,17 @@ def dfs_topological_sort(graph):
                 dfs_visit(neighbour)
 
         state[vertex.key] = "visited"
-        order.append(vertex.key)
+        topological_stack.push(vertex.key)
 
     for key in graph.vertices:
         if state[key] == "unvisited":
             dfs_visit(graph.vertices[key])
 
-    order.reverse()
+    order = []
+
+    while not topological_stack.is_empty():
+        order.append(topological_stack.pop())
+
     return order
 
 

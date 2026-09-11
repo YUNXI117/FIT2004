@@ -6,6 +6,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.append(str(PROJECT_ROOT))
 
 from Graph.Representation.Adjacency_matrix import AdjacencyMatrixGraph
+from Stack.linked_stack import LinkedStack
 
 
 # DFS modification with adjacency matrix
@@ -22,7 +23,8 @@ from Graph.Representation.Adjacency_matrix import AdjacencyMatrixGraph
 # Auxiliary Space: O(V)
 #   state stores one mark per vertex.
 #   recursion stack can contain at most V vertices.
-#   order stores at most V vertex keys.
+#   topological_stack stores at most V vertex keys.
+#   order stores the final topological order.
 #
 # Total Space: O(V^2)
 def dfs_topological_sort_matrix(graph):
@@ -31,7 +33,7 @@ def dfs_topological_sort_matrix(graph):
 
     vertex_count = len(graph.vertices)
     state = ["unvisited"] * vertex_count
-    order = []
+    topological_stack = LinkedStack()
 
     def dfs_visit(index):
         state[index] = "visiting"
@@ -47,13 +49,17 @@ def dfs_topological_sort_matrix(graph):
                 dfs_visit(to_index)
 
         state[index] = "visited"
-        order.append(graph.vertices[index].key)
+        topological_stack.push(graph.vertices[index].key)
 
     for index in range(vertex_count):
         if state[index] == "unvisited":
             dfs_visit(index)
 
-    order.reverse()
+    order = []
+
+    while not topological_stack.is_empty():
+        order.append(topological_stack.pop())
+
     return order
 
 

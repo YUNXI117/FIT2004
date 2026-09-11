@@ -49,12 +49,25 @@ Purpose: find minimum distance paths.
 - Floyd-Warshall: all-pairs shortest path, allows negative edges, detects negative cycles.
 
 Files:
-- `Shortest_path/Dijkstra_list.py`: time `O((V + E) log V)`.
-- `Shortest_path/Dijkstra_matrix.py`: time `O(V^2)`.
+- `Shortest_path/Dijkstra_list_linear.py`: Dijkstra with adjacency list and linear search, time `O(V^2 + E)`, usually `O(V^2)`.
+- `Shortest_path/Dijkstra_list.py`: Dijkstra with adjacency list and built-in priority queue, allows duplicate heap entries, time `O((V + E) log V)`.
+- `Shortest_path/Dijkstra_list_decrease_key.py`: Dijkstra with adjacency list and custom min heap with `decrease_key`, time `O((V + E) log V)`.
+- `Shortest_path/Dijkstra_matrix.py`: Dijkstra with adjacency matrix and linear search, time `O(V^2)`.
+- `Shortest_path/Dijkstra_matrix_heap.py`: Dijkstra with adjacency matrix and built-in priority queue, time `O(V^2 + E log V)`.
 - `Shortest_path/Bellman_ford_list.py`: time `O(VE)`.
 - `Shortest_path/Bellman_ford_matrix.py`: time `O(V^2 + VE)`, worst `O(V^3)`.
 - `Shortest_path/Floyd_warshall_list.py`: time `O(V^3 + E)`.
 - `Shortest_path/Floyd_warshall_matrix.py`: time `O(V^3)`.
+
+Dijkstra mind map:
+- Problem: shortest paths from one start vertex to all other vertices.
+- Requirement: edge weights must be non-negative.
+- Core tables: `distance` records the best known distance, `previous` records the path, `visited` records finalized vertices.
+- Linear-search version: repeatedly scan all unvisited vertices to find the smallest `distance`, time `O(V^2 + E)`.
+- Built-in priority-queue version: use `heapq`, insert duplicate entries when a distance improves, and ignore old entries after serving.
+- Decrease-key priority-queue version: use a custom min heap plus `index_map`, update the existing heap entry when a distance improves.
+- Matrix linear-search version: scan all vertices to choose the next vertex, then scan a full row for neighbours, time `O(V^2)`.
+- Matrix heap version: scan matrix rows plus heap updates, time `O(V^2 + E log V)`. For dense graphs, this is often simplified to `O(E log V)`.
 
 ## Minimum Spanning Tree
 

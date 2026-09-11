@@ -10,14 +10,20 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from Graph.Representation.Adjacency_list_map import MapGraph
 
-
-# Dijkstra with adjacency list
+#https://www.geeksforgeeks.org/dsa/dijkstras-shortest-path-algorithm-greedy-algo-7/
+# Dijkstra with adjacency list + priority queue
 # Requirement: all edge weights must be non-negative.
 #
-# Time Complexity: O((V + E) log V) ~ O(E * log V)
-#   Each vertex can be removed from the priority queue.
+# Main idea:
+#   distance[key] stores the best distance found so far from start_key to key.
+#   visited stores vertices whose shortest distance is already finalized.
+#   priority_queue always serves the vertex with the smallest tentative distance.
+#
+# Time Complexity: O((V + E) log E), usually written as O((V + E) log V)
 #   Each edge can cause a priority queue push.
-#   Each priority queue operation costs O(log V).
+#   A vertex may appear in the priority queue more than once after its distance
+#   is improved. Old entries are skipped after the vertex has been visited.
+#   Since E <= V^2, log E is the same Big-O scale as log V.
 #
 # Input Space: O(V + E)
 #   The graph stores vertices and adjacency lists.

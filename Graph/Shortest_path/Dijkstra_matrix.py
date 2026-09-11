@@ -9,8 +9,17 @@ if str(PROJECT_ROOT) not in sys.path:
 from Graph.Representation.Adjacency_matrix import AdjacencyMatrixGraph
 
 
-# Dijkstra with adjacency matrix
+# Dijkstra with adjacency matrix + linear search
 # Requirement: all edge weights must be non-negative.
+#
+# This file is the matrix-specific version without a heap.
+# It finds the next vertex by scanning all vertices, then scans one full matrix
+# row to relax neighbours. Because it does not use heap operations, there is
+# no extra log V factor.
+#
+# If you take the adjacency-list heap version and change the graph storage to
+# an adjacency matrix, the time is O(V^2 + E log V): scanning matrix rows costs
+# O(V^2), and heap operations cost O(E log V).
 #
 # Time Complexity: O(V^2)
 #   We repeat V times.
