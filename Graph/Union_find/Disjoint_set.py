@@ -4,6 +4,9 @@ class DisjointSet:
         self.rank = {}
 
     def make_set(self, item):
+        if item in self.parent:
+            return
+
         self.parent[item] = item
         self.rank[item] = 0
 

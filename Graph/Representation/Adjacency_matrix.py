@@ -38,6 +38,9 @@ class AdjacencyMatrixGraph:
         self.matrix.append(new_row)
 
     def add_edge(self, from_key, to_key, weight=1):
+        if weight is None:
+            raise ValueError("Edge weight cannot be None.")
+
         self.add_vertex(from_key)
         self.add_vertex(to_key)
 

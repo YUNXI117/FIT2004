@@ -10,38 +10,19 @@ from Graph.Union_find.Disjoint_set import DisjointSet
 
 
 def quick_sort_edges(edges):
-    quick_sort_edges_aux(edges, 0, len(edges) - 1)
-
-
-def quick_sort_edges_aux(edges, low, high):
-    if low < high:
-        pivot_index = partition(edges, low, high)
-        quick_sort_edges_aux(edges, low, pivot_index - 1)
-        quick_sort_edges_aux(edges, pivot_index + 1, high)
-
-
-def partition(edges, low, high):
-    pivot = edges[high][0]
-    i = low - 1
-
-    for j in range(low, high):
-        if edges[j][0] <= pivot:
-            i += 1
-            edges[i], edges[j] = edges[j], edges[i]
-
-    edges[i + 1], edges[high] = edges[high], edges[i + 1]
-    return i + 1
+    """Sort edges by weight; the name is kept for existing callers."""
+    edges.sort(key=lambda edge: edge[0])
 
 
 # Kruskal's Algorithm with adjacency matrix
 # Purpose: minimum spanning tree (MST)
 # Requirement: graph must be connected and undirected.
 #
-# Time Complexity:
-#   Average: O(V^2 + E log E)
-#   Worst: O(V^2 + E^2), if quick sort repeatedly chooses bad pivots.
+# Time Complexity: O(V^2 + E log E)
 #   We scan the whole matrix to collect edges: O(V^2).
-#   Then we quick sort the collected edges by weight.
+#   Then we sort the collected edges by weight: O(E log E).
+#   Union-find operations take O(alpha(V)) amortized time each with path
+#   compression and union by rank.
 #
 # Input Space: O(V^2)
 #   The graph stores a V by V matrix.

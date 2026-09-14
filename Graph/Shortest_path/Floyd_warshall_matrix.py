@@ -42,7 +42,7 @@ def floyd_warshall_matrix(graph):
         for to_index in range(vertex_count):
             weight = graph.matrix[from_index][to_index]
 
-            if weight is not None:
+            if weight is not None and weight < distance[from_index][to_index]:
                 distance[from_index][to_index] = weight
                 next_index[from_index][to_index] = to_index
 

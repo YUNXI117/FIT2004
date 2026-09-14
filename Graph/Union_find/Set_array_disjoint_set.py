@@ -4,6 +4,9 @@ class SetArrayDisjointSet:
         self.map_array = {}
 
     def make_set(self, item):
+        if item in self.map_array:
+            return
+
         set_index = len(self.set_array)
         self.set_array.append([item])
         self.map_array[item] = set_index

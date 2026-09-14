@@ -10,27 +10,8 @@ from Graph.Union_find.Set_array_disjoint_set import SetArrayDisjointSet
 
 
 def quick_sort_edges(edges):
-    quick_sort_edges_aux(edges, 0, len(edges) - 1)
-
-
-def quick_sort_edges_aux(edges, low, high):
-    if low < high:
-        pivot_index = partition(edges, low, high)
-        quick_sort_edges_aux(edges, low, pivot_index - 1)
-        quick_sort_edges_aux(edges, pivot_index + 1, high)
-
-
-def partition(edges, low, high):
-    pivot = edges[high][0]
-    i = low - 1
-
-    for j in range(low, high):
-        if edges[j][0] <= pivot:
-            i += 1
-            edges[i], edges[j] = edges[j], edges[i]
-
-    edges[i + 1], edges[high] = edges[high], edges[i + 1]
-    return i + 1
+    """Sort edges by weight; the name is kept for existing callers."""
+    edges.sort(key=lambda edge: edge[0])
 
 
 # Kruskal's Algorithm with adjacency matrix and set-array disjoint set.
@@ -38,14 +19,12 @@ def partition(edges, low, high):
 #   set_array[set_id] stores all vertices in that set.
 #   map_array[vertex] stores which set_id the vertex belongs to.
 #
-# Average Time Complexity: O(V^2 + E log E + V log V)
+# Time Complexity: O(V^2 + E log E + V log V)
 #   collect edges from matrix: O(V^2)
-#   quick sort edges: O(E log E) average
+#   sort edges: O(E log E)
 #   find: O(1) average, because map_array is a dictionary
-#   union: O(size of smaller set), because moved vertices need map_array updates
-#
-# Worst Time Complexity: O(V^2 + E^2 + V log V)
-#   quick sort can be O(E^2) with bad pivots.
+#   all successful unions: O(V log V), because moved vertices need map_array
+#   updates and the smaller set is always moved into the larger set
 #
 # Input Space: O(V^2)
 # Auxiliary Space: O(V + E)

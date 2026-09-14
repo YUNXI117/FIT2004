@@ -20,10 +20,9 @@ from Graph.Representation.Adjacency_list_map import MapGraph
 # Input Space: O(V + E)
 #   The graph stores vertices and adjacency lists.
 #
-# Auxiliary Space: O(V + E)
+# Auxiliary Space: O(V)
 #   distance stores at most V entries.
 #   previous stores at most V entries.
-#   edges stores at most E edge records.
 #
 # Total Space: O(V + E)
 def bellman_ford(graph, start_key):
@@ -38,34 +37,42 @@ def bellman_ford(graph, start_key):
         previous[key] = None
 
     distance[start_key] = 0
-    edges = []
-
-    for key in graph.vertices:
-        vertex = graph.vertices[key]
-
-        for edge in vertex.edges:
-            edges.append((edge.from_vertex.key, edge.to_vertex.key, edge.weight))
 
     for _ in range(len(graph.vertices) - 1):
         updated = False
 
-        for from_key, to_key, weight in edges:
+        for from_key in graph.vertices:
+            from_vertex = graph.vertices[from_key]
+
             if distance[from_key] == inf:
                 continue
 
-            new_distance = distance[from_key] + weight
+            for edge in from_vertex.edges:
+                to_key = edge.to_vertex.key
+                weight = edge.weight
 
-            if new_distance < distance[to_key]:
-                distance[to_key] = new_distance
-                previous[to_key] = from_key
-                updated = True
+                new_distance = distance[from_key] + weight
+
+                if new_distance < distance[to_key]:
+                    distance[to_key] = new_distance
+                    previous[to_key] = from_key
+                    updated = True
 
         if not updated:
             break
 
-    for from_key, to_key, weight in edges:
-        if distance[from_key] != inf and distance[from_key] + weight < distance[to_key]:
-            raise ValueError("Graph contains a negative-weight cycle.")
+    for from_key in graph.vertices:
+        from_vertex = graph.vertices[from_key]
+
+        if distance[from_key] == inf:
+            continue
+
+        for edge in from_vertex.edges:
+            to_key = edge.to_vertex.key
+            weight = edge.weight
+
+            if distance[from_key] + weight < distance[to_key]:
+                raise ValueError("Graph contains a negative-weight cycle.")
 
     return distance, previous
 

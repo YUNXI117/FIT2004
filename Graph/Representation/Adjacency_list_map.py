@@ -7,6 +7,11 @@ class Vertex:
         self.edges = []
 
     def add_edge(self, edge):
+        for existing_edge in self.edges:
+            if existing_edge.to_vertex is edge.to_vertex:
+                existing_edge.weight = edge.weight
+                return
+
         self.edges.append(edge)
 
     def __str__(self):
@@ -31,6 +36,9 @@ class MapGraph:
             self.vertices[key] = Vertex(key)
 
     def add_edge(self, from_key, to_key, weight = 1):
+        if weight is None:
+            raise ValueError("Edge weight cannot be None.")
+
         self.add_vertex(from_key)
         self.add_vertex(to_key)
 

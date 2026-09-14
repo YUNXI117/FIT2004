@@ -7,48 +7,27 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from Graph.Representation.Adjacency_list_map import MapGraph
 from Graph.Union_find.Disjoint_set import DisjointSet
-# Tree is no cycle and undirected
 
 
 def quick_sort_edges(edges):
-    quick_sort_edges_aux(edges, 0, len(edges) - 1)
-
-
-def quick_sort_edges_aux(edges, low, high):
-    if low < high:
-        pivot_index = partition(edges, low, high)
-        quick_sort_edges_aux(edges, low, pivot_index - 1)
-        quick_sort_edges_aux(edges, pivot_index + 1, high)
-
-
-def partition(edges, low, high):
-    pivot = edges[high][0]
-    i = low - 1
-
-    for j in range(low, high):
-        if edges[j][0] <= pivot:
-            i += 1
-            edges[i], edges[j] = edges[j], edges[i]
-
-    edges[i + 1], edges[high] = edges[high], edges[i + 1]
-    return i + 1
+    """Sort edges by weight; the name is kept for existing callers."""
+    edges.sort(key=lambda edge: edge[0])
 
 
 # Kruskal's Algorithm with adjacency list
 # Purpose: minimum spanning tree (MST)
 # Requirement: graph must be connected and undirected.
 #
-# Time Complexity:
-#   Average: O(E log E)
-#   Worst: O(E^2), if quick sort repeatedly chooses bad pivots.
-#   We collect all edges and quick sort them by weight.
-#   Union-find operations are almost O(1) each with path compression and rank.
+# Time Complexity: O(E log E)
+#   We collect each undirected edge once and sort the edges by weight.
+#   Union-find operations take O(alpha(V)) amortized time each with path
+#   compression and union by rank.
 #
 # Input Space: O(V + E)
 #   The graph stores vertices and adjacency lists.
 #
 # Auxiliary Space: O(V + E)
-#   edges stores all edge objects from the adjacency lists.
+#   edges stores each logical undirected edge once.
 #   disjoint_set stores at most V vertices.
 #   mst_edges stores V - 1 edges.
 #
@@ -61,12 +40,14 @@ def kruskal_mst(graph):
         return [], 0
 
     edges = []
+    vertex_order = {key: index for index, key in enumerate(graph.vertices)}
 
-    for key in graph.vertices:
-        vertex = graph.vertices[key]
-
+    for from_key, vertex in graph.vertices.items():
         for edge in vertex.edges:
-            edges.append((edge.weight, edge.from_vertex.key, edge.to_vertex.key))
+            to_key = edge.to_vertex.key
+
+            if vertex_order[from_key] < vertex_order[to_key]:
+                edges.append((edge.weight, from_key, to_key))
 
     quick_sort_edges(edges)
 

@@ -9,6 +9,11 @@ Graph storage:
 - `Representation/Adjacency_linked_list.py`: adjacency list where each vertex stores edges in a linked list.
 - `Representation/Adjacency_matrix.py`: adjacency matrix.
 
+Edge contract:
+- These classes store at most one edge per ordered pair in a directed graph, or one logical edge per vertex pair in an undirected graph.
+- Calling `add_edge` again updates that edge to the new weight. In an undirected graph, adding the reverse direction updates the same logical edge.
+- A self-loop is stored once. `None` is reserved to mean "no edge" and is not a valid edge weight.
+
 Complexity:
 - Adjacency list space: `O(V + E)`.
 - Adjacency matrix space: `O(V^2)`.
@@ -79,12 +84,17 @@ Requirement:
 Files:
 - `Minimum_spanning_tree/Prim_list.py`: Prim with adjacency list and priority queue, time `O(E log E)`.
 - `Minimum_spanning_tree/Prim_matrix.py`: Prim with adjacency matrix, time `O(V^2)`.
-- `Minimum_spanning_tree/Kruskal_list.py`: Kruskal with standard disjoint set, average time `O(E log E)`.
-- `Minimum_spanning_tree/Kruskal_matrix.py`: Kruskal with matrix, average time `O(V^2 + E log E)`.
+- `Minimum_spanning_tree/Kruskal_list.py`: Kruskal with standard disjoint set, time `O(E log E)`.
+- `Minimum_spanning_tree/Kruskal_matrix.py`: Kruskal with matrix, time `O(V^2 + E log E)`.
 - `Minimum_spanning_tree/Kruskal_set_array_list.py`: Kruskal with set-array disjoint set.
 - `Minimum_spanning_tree/Kruskal_set_array_matrix.py`: Kruskal with set-array disjoint set.
 - `Minimum_spanning_tree/Kruskal_union_find_list.py`: Kruskal with array-based union-find.
 - `Minimum_spanning_tree/Kruskal_union_find_matrix.py`: Kruskal with array-based union-find.
+
+Recommended implementations:
+- For a sparse graph or the lecture's Kruskal method, use `Kruskal_union_find_list.py`. It uses the lecture-style negative-size parent array, union by size, and path compression.
+- For a dense graph already stored as a matrix, use `Prim_matrix.py`, which runs in `O(V^2)` time without sorting all edges.
+- The set-array Kruskal files are retained as teaching versions. Moving the smaller set gives `O(V log V)` total movement across successful unions, but the array union-find is the preferred general implementation.
 
 ## Union Find
 
