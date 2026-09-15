@@ -15,6 +15,12 @@ class HashTableSeparateChaining(HashTable[str, V]):
     attributes:
         _table: used to represent our internal array
         _length: number of elements in the hash table
+
+    Complexity notation:
+        N: number of key-value pairs stored in the hash table
+        S: table size / number of buckets
+        K: length of the key
+        alpha: load factor, N / S
     """
 
     DEFAULT_TABLE_SIZE = 17
@@ -23,7 +29,7 @@ class HashTableSeparateChaining(HashTable[str, V]):
 
     def __init__(self, table_size: int = DEFAULT_TABLE_SIZE) -> None:
         """
-        :complexity: O(N) where N is the table size.
+        :complexity: O(S) where S is the table size.
         """
         if table_size <= 0:
             raise ValueError("Table size should be larger than 0.")
@@ -54,11 +60,11 @@ class HashTableSeparateChaining(HashTable[str, V]):
 
     def items(self) -> ArrayR[Tuple[str, V]]:
         """
-        Returns all keys in the hash table
-        :complexity: O(N + S) where N is the number of items in our hash table
-        and S is the table size. Depending on how the table is created, if the table size
-        is not variable (e.g. it's always using the default size), then S can be ignored as
-        a constant, simplifying the complexity to O(N).
+        Returns all key-value pairs in the hash table.
+        :complexity: O(N + S), where N is the number of stored pairs and S is
+            the table size. If S is treated as a fixed constant, this can be
+            simplified to O(N).
+        :auxiliary space: O(N) for the returned array.
         """
         res = ArrayR(self._length)
         i = 0
@@ -88,10 +94,9 @@ class HashTableSeparateChaining(HashTable[str, V]):
         Deletes an item from our hash table
         :raises KeyError: when the key doesn't exist
         :complexity:
-            Best: O(K) where K is the length of the key (for hashing). Happens when the chain (linked list) does
-                not have many elements.
-            Worst: O(N + K) where N is the number of items in the hash table and K is the length of the key.
-                Happens when the position has many elements and we have to traverse the linked list.
+            Best: O(K) when the target chain is empty or the key is found immediately.
+            Average: O(K + alpha) under uniform hashing.
+            Worst: O(K + N) when all items collide into one chain.
         """
         position = self.hash(key)
         if self._table[position] is None:
@@ -114,10 +119,9 @@ class HashTableSeparateChaining(HashTable[str, V]):
         Get the data associated with a key
         :raises KeyError: when the key doesn't exist
         :complexity:
-            Best: O(K) where K is the length of the key (for hashing). Happens when the chain at the position
-                doesn't have many items.
-            Worst: O(N + K) where N is the number of items in the hash table and K is the length of the key.
-                Happens when we have to traverse a long chain to find the key.
+            Best: O(K) when the key is found immediately or the target chain is empty.
+            Average: O(K + alpha) under uniform hashing.
+            Worst: O(K + N) when all items collide into one chain.
         """
         position = self.hash(key)
         if self._table[position] is None:
@@ -132,9 +136,9 @@ class HashTableSeparateChaining(HashTable[str, V]):
         """
         Set a (key, data) pair in our hash table
         :complexity:
-            Best: O(K) where K is the length of the key (for hashing). Happens when the position is empty.
-            Worst: O(N + K) where N is the number of items in the hash table and K is the length of the key.
-                Happens when the position is not empty and we have to traverse the linked list.
+            Best: O(K) when the target chain is empty.
+            Average: O(K + alpha) under uniform hashing.
+            Worst: O(K + N) when all items collide into one chain.
         """
         position = self.hash(key)
         if self._table[position] is None:
@@ -156,9 +160,9 @@ class HashTableSeparateChaining(HashTable[str, V]):
         """
         Returns an iterator for the hash table
         :complexity:
-            Best: O(1) when the next spot in the table has a non-empty list, or the current list has more items.
-            Worst: O(N) where N is the table capacity, when we have to skip over many empty spots
-            in the table until we find the next non-empty list.
+            Creating the iterator is O(1).
+            Iterating over all values is O(N + S), because every bucket may be
+            checked and every stored item is yielded once.
         """
         for list in self._table:
             if list is not None:
@@ -168,13 +172,14 @@ class HashTableSeparateChaining(HashTable[str, V]):
     def __len__(self) -> int:
         """
         Returns number of elements in the hash table
+        :complexity: O(1)
         """
         return self._length
 
     def __str__(self) -> str:
         """
         Returns all they key/value pairs in our hash table (no particular order)
-        :complexity: O(N) where N is the number of items in our hash table
+        :complexity: O(N + S), because it first calls items().
         """
         items = self.items()
         items = '\n'.join(map(lambda x: f"({x[0]}, {x[1]})", items))

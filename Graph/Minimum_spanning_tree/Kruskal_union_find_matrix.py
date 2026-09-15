@@ -10,7 +10,7 @@ from Graph.Union_find.Array_union_find import ArrayUnionFind
 
 
 def quick_sort_edges(edges):
-    """Sort edges by weight; the name is kept for existing callers."""
+    """Sort edges by weight with Python sort; not hand-written quicksort."""
     edges.sort(key=lambda edge: edge[0])
 
 

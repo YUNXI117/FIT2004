@@ -13,9 +13,10 @@ from Graph.Representation.Adjacency_list_map import MapGraph
 # Purpose: all-pairs shortest path.
 # Requirement: graph can have negative edges, but must not have a negative cycle.
 #
-# Time Complexity: O(V^3 + E)
+# Time Complexity: O(V^3)
 #   We initialize the distance table from adjacency lists: O(V + E).
 #   Then we try every intermediate vertex between every pair: O(V^3).
+#   For a simple graph, E <= V^2, so O(V + E) is dominated by O(V^3).
 #
 # Input Space: O(V + E)
 #   The graph stores vertices and adjacency lists.
@@ -24,7 +25,7 @@ from Graph.Representation.Adjacency_list_map import MapGraph
 #   distance stores all pairs of vertices.
 #   next_index stores path reconstruction information for all pairs.
 #
-# Total Space: O(V^2 + E)
+# Total Space: O(V^2)
 def floyd_warshall(graph):
     keys = list(graph.vertices.keys())
     vertex_count = len(keys)

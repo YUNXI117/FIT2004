@@ -11,19 +11,25 @@ if str(PROJECT_ROOT) not in sys.path:
 from Graph.Representation.Adjacency_list_map import MapGraph
 
 #https://www.geeksforgeeks.org/dsa/dijkstras-shortest-path-algorithm-greedy-algo-7/
-# Dijkstra with adjacency list + priority queue
+# Dijkstra with adjacency list + built-in priority queue
 # Requirement: all edge weights must be non-negative.
+#
+# Course note:
+#   This is the "duplicate heap entries" approach. It is common online because
+#   Python heapq has push/pop but no decrease-key operation.
+#   For the FIT2004-style heap update approach, see Dijkstra_list_decrease_key.py.
 #
 # Main idea:
 #   distance[key] stores the best distance found so far from start_key to key.
 #   visited stores vertices whose shortest distance is already finalized.
 #   priority_queue always serves the vertex with the smallest tentative distance.
 #
-# Time Complexity: O((V + E) log E), usually written as O((V + E) log V)
+# Time Complexity: O((V + E) log V)
 #   Each edge can cause a priority queue push.
 #   A vertex may appear in the priority queue more than once after its distance
 #   is improved. Old entries are skipped after the vertex has been visited.
-#   Since E <= V^2, log E is the same Big-O scale as log V.
+#   The duplicate heap can contain O(E) entries, so each heap operation is
+#   O(log E). Since E <= V^2 in a simple graph, log E = O(log V).
 #
 # Input Space: O(V + E)
 #   The graph stores vertices and adjacency lists.

@@ -1,3 +1,12 @@
+# Disjoint set with dictionary parent + rank.
+#
+# Let N be the number of stored items.
+# Dictionary lookups are average O(1).
+#
+# Space Complexity: O(N)
+# make_set: average O(1)
+# find: O(alpha(N)) amortized, with path compression
+# union: O(alpha(N)) amortized, with path compression + union by rank
 class DisjointSet:
     def __init__(self):
         self.parent = {}

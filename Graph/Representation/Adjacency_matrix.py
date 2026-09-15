@@ -1,3 +1,17 @@
+# Adjacency matrix graph.
+#
+# V: number of vertices
+#
+# Space Complexity: O(V^2)
+# add_vertex: O(V), because one new column is added to every old row and one
+#   new row of length V is created. Building the whole matrix is O(V^2).
+# add_edge: average O(1)
+# remove_edge: average O(1)
+# has_edge: average O(1)
+# get_weight: average O(1)
+# get_neighbours: O(V), because it scans one full matrix row
+# get_edges: O(V), because it scans one full matrix row
+# print_matrix: O(V^2)
 class Vertex:
     def __init__(self, key):
         self.key = key

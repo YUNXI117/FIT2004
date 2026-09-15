@@ -2,6 +2,15 @@
 
 Use this folder by problem type, not by algorithm name.
 
+Complexity convention:
+- `V` means number of vertices.
+- `E` means number of edges.
+- `N` means number of stored items when discussing hash tables or disjoint sets.
+- Time complexity is worst-case unless it explicitly says average or amortized.
+- Input space means the graph/table already stored before the algorithm runs.
+- Auxiliary space means extra memory created by the algorithm.
+- Hash-table dictionary operations are average `O(1)`, worst `O(N)` under heavy collisions.
+
 ## Representation
 
 Graph storage:
@@ -30,6 +39,9 @@ Purpose: visit reachable vertices.
 Key idea:
 - `discovered`: already in queue or stack.
 - `visited`: already removed from queue or stack and processed.
+- BFS uses a queue, so discovered vertices should not be added again.
+- Iterative DFS uses a stack, so neighbour insertion order is reversed if you
+  want the smallest/earliest neighbour to be visited first.
 
 ## Topological Sort
 
@@ -44,6 +56,12 @@ Files:
 - `Topological_sort/DFS_topological_list.py`: DFS topological sort with adjacency list, time `O(V + E)`.
 - `Topological_sort/DFS_topological_matrix.py`: DFS topological sort with adjacency matrix, time `O(V^2)`.
 
+Key ideas:
+- Kahn's algorithm is BFS-style: compute incoming-edge counts, put only vertices with in-degree `0` into process, then remove their outgoing edges.
+- The process can be a queue or a stack; different choices can give different valid topological orders.
+- DFS topological sort pushes a vertex after all outgoing edges have finished, then pops the stack to get the order.
+- If the graph has a cycle, topological sort is not possible.
+
 ## Shortest Path
 
 Purpose: find minimum distance paths.
@@ -56,12 +74,12 @@ Purpose: find minimum distance paths.
 Files:
 - `Shortest_path/Dijkstra_list_linear.py`: Dijkstra with adjacency list and linear search, time `O(V^2 + E)`, usually `O(V^2)`.
 - `Shortest_path/Dijkstra_list.py`: Dijkstra with adjacency list and built-in priority queue, allows duplicate heap entries, time `O((V + E) log V)`.
-- `Shortest_path/Dijkstra_list_decrease_key.py`: Dijkstra with adjacency list and custom min heap with `decrease_key`, time `O((V + E) log V)`.
+- `Shortest_path/Dijkstra_list_decrease_key.py`: Dijkstra with adjacency list and custom min heap with `decrease_key`, time `O((V + E) log V)`. This is the preferred FIT2004-style heap/update version.
 - `Shortest_path/Dijkstra_matrix.py`: Dijkstra with adjacency matrix and linear search, time `O(V^2)`.
 - `Shortest_path/Dijkstra_matrix_heap.py`: Dijkstra with adjacency matrix and built-in priority queue, time `O(V^2 + E log V)`.
-- `Shortest_path/Bellman_ford_list.py`: time `O(VE)`.
+- `Shortest_path/Bellman_ford_list.py`: single-array Bellman-Ford, time `O(V + VE + E) = O(VE)`, auxiliary space `O(V)`.
 - `Shortest_path/Bellman_ford_matrix.py`: time `O(V^2 + VE)`, worst `O(V^3)`.
-- `Shortest_path/Floyd_warshall_list.py`: time `O(V^3 + E)`.
+- `Shortest_path/Floyd_warshall_list.py`: time `O(V^3)`.
 - `Shortest_path/Floyd_warshall_matrix.py`: time `O(V^3)`.
 
 Dijkstra mind map:
@@ -69,10 +87,12 @@ Dijkstra mind map:
 - Requirement: edge weights must be non-negative.
 - Core tables: `distance` records the best known distance, `previous` records the path, `visited` records finalized vertices.
 - Linear-search version: repeatedly scan all unvisited vertices to find the smallest `distance`, time `O(V^2 + E)`.
-- Built-in priority-queue version: use `heapq`, insert duplicate entries when a distance improves, and ignore old entries after serving.
-- Decrease-key priority-queue version: use a custom min heap plus `index_map`, update the existing heap entry when a distance improves.
+- Built-in priority-queue version: use `heapq`, insert duplicate entries when a distance improves, and ignore old entries after serving. This is the common online approach.
+- Decrease-key priority-queue version: use a custom min heap plus `index_map`, update the existing heap entry when a distance improves. This matches the course's preferred update approach.
 - Matrix linear-search version: scan all vertices to choose the next vertex, then scan a full row for neighbours, time `O(V^2)`.
 - Matrix heap version: scan matrix rows plus heap updates, time `O(V^2 + E log V)`. For dense graphs, this is often simplified to `O(E log V)`.
+- Bellman-Ford standard single-array version: initialize `O(V)`, relax edges `V - 1` times `O(VE)`, check negative cycle `O(E)`, so total time `O(V + VE + E) = O(VE)` and auxiliary space `O(V)`.
+- Bellman-Ford matrix version here: first collects edges from the matrix, so it uses `O(V + E)` auxiliary space.
 
 ## Minimum Spanning Tree
 
@@ -82,7 +102,7 @@ Requirement:
 - Connected, undirected, weighted graph.
 
 Files:
-- `Minimum_spanning_tree/Prim_list.py`: Prim with adjacency list and priority queue, time `O(E log E)`.
+- `Minimum_spanning_tree/Prim_list.py`: Prim with adjacency list and priority queue, time `O(E log V)`.
 - `Minimum_spanning_tree/Prim_matrix.py`: Prim with adjacency matrix, time `O(V^2)`.
 - `Minimum_spanning_tree/Kruskal_list.py`: Kruskal with standard disjoint set, time `O(E log E)`.
 - `Minimum_spanning_tree/Kruskal_matrix.py`: Kruskal with matrix, time `O(V^2 + E log E)`.

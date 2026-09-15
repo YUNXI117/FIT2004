@@ -1,5 +1,18 @@
-#vertices use dictionary
-#edges use list
+# Adjacency list graph implemented with a dictionary/map.
+#
+# V: number of vertices
+# E: number of edges
+# deg(u): number of outgoing edges from vertex u
+#
+# Space Complexity: O(V + E)
+# add_vertex: average O(1), worst O(V) because dictionary operations can collide
+# add_edge: average O(deg(from) + deg(to)) for undirected graphs, because this
+#   implementation scans the edge list to update an existing edge instead of
+#   storing duplicate edges. For directed graphs, it is O(deg(from)).
+# get_vertex: average O(1)
+# get_neighbours: O(deg(key))
+# get_edges: average O(1), returns the stored edge list directly
+# print_graph: O(V + E)
 
 class Vertex:
     def __init__(self, key):

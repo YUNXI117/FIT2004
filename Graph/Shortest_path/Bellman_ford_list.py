@@ -13,9 +13,11 @@ from Graph.Representation.Adjacency_list_map import MapGraph
 # Purpose: single-source shortest path.
 # Requirement: graph can have negative edges, but must not have a negative cycle.
 #
-# Time Complexity: O(VE)
-#   We relax all edges V - 1 times.
-#   Then we scan all edges one more time to detect a negative cycle.
+# Time Complexity: O(V + VE + E) = O(VE)
+#   Initialize all vertex distances: O(V).
+#   Relax all edges V - 1 times: O(VE).
+#   Scan all edges one more time to detect a negative cycle: O(E).
+#   This matches the single-column/single-array Bellman-Ford optimization.
 #
 # Input Space: O(V + E)
 #   The graph stores vertices and adjacency lists.

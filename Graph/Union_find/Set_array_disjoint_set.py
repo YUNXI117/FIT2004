@@ -1,3 +1,14 @@
+# Lecture-style disjoint set using set_array + map_array.
+#
+# Let N be the number of stored items.
+# map_array[item] stores which set index the item belongs to.
+# Dictionary map_array lookups are average O(1).
+#
+# Space Complexity: O(N)
+# make_set: average O(1)
+# find: average O(1)
+# one union: O(size of smaller set), because those items move sets
+# all successful unions: O(N log N), because smaller sets are moved into larger sets
 class SetArrayDisjointSet:
     def __init__(self):
         self.set_array = []

@@ -14,10 +14,10 @@ from Graph.Representation.Adjacency_list_map import MapGraph
 # Purpose: minimum spanning tree (MST)
 # Requirement: graph must be connected and undirected.
 #
-# Time Complexity: O(E log E)
+# Time Complexity: O(E log V)
 #   Each edge can be pushed into the priority queue.
-#   Each priority queue operation costs O(log E).
-#   Since E <= V^2, this is also commonly written as O(E log V).
+#   The duplicate heap can contain O(E) entries, so each heap operation is
+#   O(log E). Since E <= V^2 in a simple graph, log E = O(log V).
 #
 # Input Space: O(V + E)
 #   The graph stores vertices and adjacency lists.

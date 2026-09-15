@@ -1,3 +1,14 @@
+# Disjoint set with array parent and dictionary index_map.
+#
+# Let N be the number of stored items.
+# parent[index] < 0 means the index is a root.
+# abs(parent[index]) is the set size.
+# Dictionary index_map lookups are average O(1).
+#
+# Space Complexity: O(N)
+# make_set: average O(1)
+# find/find_index: O(alpha(N)) amortized, with path compression
+# union: O(alpha(N)) amortized, with path compression + union by size
 class ArrayUnionFind:
     def __init__(self):
         self.items = []

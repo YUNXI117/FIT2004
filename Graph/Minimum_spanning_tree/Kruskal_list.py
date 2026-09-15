@@ -10,7 +10,7 @@ from Graph.Union_find.Disjoint_set import DisjointSet
 
 
 def quick_sort_edges(edges):
-    """Sort edges by weight; the name is kept for existing callers."""
+    """Sort edges by weight with Python sort; not hand-written quicksort."""
     edges.sort(key=lambda edge: edge[0])
 
 

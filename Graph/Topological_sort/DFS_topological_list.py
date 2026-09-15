@@ -13,6 +13,12 @@ from Stack.linked_stack import LinkedStack
 # Purpose: topological sort using DFS finish order.
 # Requirement: graph must be a directed acyclic graph (DAG).
 #
+# Course idea:
+#   Do normal DFS, but push a vertex only after all of its outgoing edges have
+#   been fully processed. Popping that finish-order stack gives a topological
+#   order. This is the part that is easy to mix up: do not push when the vertex
+#   is first discovered; push when it is finished.
+#
 # Time Complexity: O(V + E)
 #   Each vertex is visited once.
 #   Each edge is checked once during DFS.

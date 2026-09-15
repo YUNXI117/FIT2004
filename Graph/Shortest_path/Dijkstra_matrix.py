@@ -17,10 +17,6 @@ from Graph.Representation.Adjacency_matrix import AdjacencyMatrixGraph
 # row to relax neighbours. Because it does not use heap operations, there is
 # no extra log V factor.
 #
-# If you take the adjacency-list heap version and change the graph storage to
-# an adjacency matrix, the time is O(V^2 + E log V): scanning matrix rows costs
-# O(V^2), and heap operations cost O(E log V).
-#
 # Time Complexity: O(V^2)
 #   We repeat V times.
 #   Each time, we scan all vertices to find the unvisited vertex with the

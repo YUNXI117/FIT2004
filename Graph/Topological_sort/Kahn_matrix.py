@@ -13,6 +13,12 @@ from Queue.linked_queue import LinkedQueue
 # Purpose: topological sort
 # Requirement: graph must be a directed acyclic graph (DAG).
 #
+# Course idea:
+#   Kahn's algorithm is BFS-style. A vertex can enter process only when it has
+#   no remaining incoming edges, represented here by in_degree[index] == 0.
+#   The process structure is usually a queue, but a stack can also produce a
+#   valid topological order because the answer is not always unique.
+#
 # Time Complexity: O(V^2)
 #   We scan the whole V by V matrix to compute in-degree.
 #   During the algorithm, each served vertex scans one full matrix row.

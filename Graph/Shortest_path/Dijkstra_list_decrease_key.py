@@ -103,6 +103,11 @@ class MinHeap:
 # Dijkstra with adjacency list + custom min heap + decrease-key
 # Requirement: all edge weights must be non-negative.
 #
+# Course note:
+#   This is the preferred FIT2004-style heap approach: each vertex appears in
+#   the heap at most once, and index_map lets us update its position after
+#   decrease_key/rise/sink operations.
+#
 # Main idea:
 #   distance[key] stores the best distance found so far from start_key to key.
 #   previous[key] stores the vertex before key on the shortest path.

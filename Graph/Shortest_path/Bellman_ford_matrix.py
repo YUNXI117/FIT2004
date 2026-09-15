@@ -13,9 +13,15 @@ from Graph.Representation.Adjacency_matrix import AdjacencyMatrixGraph
 # Purpose: single-source shortest path.
 # Requirement: graph can have negative edges, but must not have a negative cycle.
 #
-# Time Complexity: O(V^2 + VE), worst O(V^3)
+# Standard Bellman-Ford, when the edges are already available, is O(VE) time
+# and O(V) auxiliary space. This matrix version first collects the existing
+# edges from the matrix so that the relaxation loop can iterate over E real
+# edges instead of scanning V^2 cells every round.
+#
+# Time Complexity: O(V^2 + VE + E) = O(V^2 + VE), worst O(V^3)
 #   We scan the matrix once to collect edges: O(V^2).
 #   Then we relax all edges V - 1 times: O(VE).
+#   Then we scan all collected edges once more to detect a negative cycle: O(E).
 #
 # Input Space: O(V^2)
 #   The graph stores a V by V matrix.

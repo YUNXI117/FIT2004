@@ -10,6 +10,11 @@ from Stack.linked_stack import LinkedStack
 
 
 # DFS with adjacency matrix
+# Course note:
+#   This iterative DFS uses a stack. Because a stack is last-in-first-out, we
+#   scan the matrix row from right to left so lower-index neighbours are popped
+#   and visited first.
+#
 # Time Complexity: O(V^2)
 #   Each vertex is visited once.
 #   For each visited vertex, we scan one full matrix row of length V.

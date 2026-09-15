@@ -10,6 +10,11 @@ from Stack.linked_stack import LinkedStack
 
 
 # DFS with adjacency list
+# Course note:
+#   This iterative DFS uses a stack. Because a stack is last-in-first-out, we
+#   push neighbours in reverse edge-list order so they are visited in the
+#   original edge-list order.
+#
 # Time Complexity: O(V + E)
 #   Each vertex is visited once: O(V)
 #   Each edge is checked once or twice: O(E)
