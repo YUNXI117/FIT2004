@@ -1,14 +1,29 @@
-# Disjoint set with array parent and dictionary index_map.
+# Optimized extension of Lecture05's negative-size parent array.
+# The video (~44:00--61:00) demonstrates root walking and union by size.
+# This class additionally compresses paths; Array_union_find_no_compression.py
+# keeps the demonstrated walk-only find and its O(log N) worst-case analysis.
+# The component parent forest is NOT the MST: MST edges are stored separately.
 #
 # Let N be the number of stored items.
 # parent[index] < 0 means the index is a root.
 # abs(parent[index]) is the set size.
-# Dictionary index_map lookups are average O(1).
+# Dictionary index_map lookups are average O(1); item-based bounds assume this.
+# Path lengths below have a worst-case guarantee independent of hashing.
 #
 # Space Complexity: O(N)
-# make_set: average O(1)
-# find/find_index: O(alpha(N)) amortized, with path compression
-# union: O(alpha(N)) amortized, with path compression + union by size
+# make_set: amortized O(1), assuming average O(1) dictionary operations;
+#   a single insertion can take O(N) when a list/dictionary resizes.
+# find_index: O(log N) single-call worst case, O(alpha(N)) amortized.
+#   Union by size bounds tree height: whenever a node's depth increases,
+#   its component size at least doubles, so this happens at most log2(N) times.
+#   Path compression shortens paths further, but does not make every call O(1).
+# find/union/same_set/size: O(log N) single-call worst case and O(alpha(N))
+#   amortized, under the dictionary assumption. union includes two finds;
+#   only linking the roots after finding them takes O(1).
+# With N singleton creations and M subsequent operations, total work is
+#   O(N + M alpha(N)) under these assumptions; alpha is inverse Ackermann.
+# Amortized describes a bound over any operation sequence, not average inputs.
+# Recursive find_index uses O(log N) stack space in the worst case.
 class ArrayUnionFind:
     def __init__(self):
         self.items = []
@@ -31,6 +46,8 @@ class ArrayUnionFind:
         if self.parent[index] < 0:
             return index
 
+        # Additional optimization: after finding the root, bypass ancestors.
+        # This changes parent links, but not membership or the root's size.
         self.parent[index] = self.find_index(self.parent[index])
         return self.parent[index]
 

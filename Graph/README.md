@@ -77,6 +77,7 @@ Files:
 - `Shortest_path/Dijkstra_list_decrease_key.py`: Dijkstra with adjacency list and custom min heap with `decrease_key`, time `O((V + E) log V)`. This is the preferred FIT2004-style heap/update version.
 - `Shortest_path/Dijkstra_matrix.py`: Dijkstra with adjacency matrix and linear search, time `O(V^2)`.
 - `Shortest_path/Dijkstra_matrix_heap.py`: Dijkstra with adjacency matrix and built-in priority queue, time `O(V^2 + E log V)`.
+- `Shortest_path/Dijkstra_matrix_decrease_key.py`: Dijkstra with adjacency matrix and custom min heap with `decrease_key`, time `O(V^2 + E log V)`.
 - `Shortest_path/Bellman_ford_list.py`: single-array Bellman-Ford, time `O(V + VE + E) = O(VE)`, auxiliary space `O(V)`.
 - `Shortest_path/Bellman_ford_matrix.py`: time `O(V^2 + VE)`, worst `O(V^3)`.
 - `Shortest_path/Floyd_warshall_list.py`: time `O(V^3)`.
@@ -90,7 +91,8 @@ Dijkstra mind map:
 - Built-in priority-queue version: use `heapq`, insert duplicate entries when a distance improves, and ignore old entries after serving. This is the common online approach.
 - Decrease-key priority-queue version: use a custom min heap plus `index_map`, update the existing heap entry when a distance improves. This matches the course's preferred update approach.
 - Matrix linear-search version: scan all vertices to choose the next vertex, then scan a full row for neighbours, time `O(V^2)`.
-- Matrix heap version: scan matrix rows plus heap updates, time `O(V^2 + E log V)`. For dense graphs, this is often simplified to `O(E log V)`.
+- Matrix duplicate-heap version: scan matrix rows plus duplicate heap pushes, time `O(V^2 + E log V)`.
+- Matrix decrease-key version: scan matrix rows plus heap updates, time `O(V^2 + E log V)`.
 - Bellman-Ford standard single-array version: initialize `O(V)`, relax edges `V - 1` times `O(VE)`, check negative cycle `O(E)`, so total time `O(V + VE + E) = O(VE)` and auxiliary space `O(V)`.
 - Bellman-Ford matrix version here: first collects edges from the matrix, so it uses `O(V + E)` auxiliary space.
 
@@ -100,21 +102,40 @@ Purpose: connect all vertices with minimum total weight.
 
 Requirement:
 - Connected, undirected, weighted graph.
+- Negative/zero weights and negative cycles in the input are allowed; the output is a tree.
+- Empty input returns `([], 0)`; nonempty disconnected or directed input raises `ValueError`.
+- Detailed Chinese video comparison, timestamps, proofs and complexity derivations:
+  [Lecture05 MST notes](Minimum_spanning_tree/LECTURE05_MST_NOTES.md).
 
 Files:
 - `Minimum_spanning_tree/Prim_list.py`: Prim with adjacency list and priority queue, time `O(E log V)`.
 - `Minimum_spanning_tree/Prim_matrix.py`: Prim with adjacency matrix, time `O(V^2)`.
-- `Minimum_spanning_tree/Kruskal_list.py`: Kruskal with standard disjoint set, time `O(E log E)`.
+- `Minimum_spanning_tree/Kruskal_list.py`: Kruskal with rank + path compression, time `O(V + E log E)` (`O(E log E)` when connected).
 - `Minimum_spanning_tree/Kruskal_matrix.py`: Kruskal with matrix, time `O(V^2 + E log E)`.
 - `Minimum_spanning_tree/Kruskal_set_array_list.py`: Kruskal with set-array disjoint set.
 - `Minimum_spanning_tree/Kruskal_set_array_matrix.py`: Kruskal with set-array disjoint set.
-- `Minimum_spanning_tree/Kruskal_union_find_list.py`: Kruskal with array-based union-find.
-- `Minimum_spanning_tree/Kruskal_union_find_matrix.py`: Kruskal with array-based union-find.
+- `Minimum_spanning_tree/Kruskal_python_set_list.py` / `Kruskal_python_set_matrix.py`: built-in Python sets + member-to-component map, small-to-large union.
+- `Minimum_spanning_tree/Kruskal_union_by_size_list.py` / `Kruskal_union_by_size_matrix.py`: lecture's negative-size parent array, WITHOUT path compression; each find/full union has `O(log V)` worst-case parent work.
+- `Minimum_spanning_tree/Kruskal_union_find_list.py`: size + path compression, adjacency list.
+- `Minimum_spanning_tree/Kruskal_union_find_matrix.py`: size + path compression, adjacency matrix.
+- `Minimum_spanning_tree/Edge_sorting.py`: default Python sort, plus actual teaching Quicksort. Every Kruskal entry point accepts `sorter=quick_sort_edges`.
 
 Recommended implementations:
-- For a sparse graph or the lecture's Kruskal method, use `Kruskal_union_find_list.py`. It uses the lecture-style negative-size parent array, union by size, and path compression.
+- To follow the video's demonstrated parent-array method, start with `Kruskal_union_by_size_list.py`. It uses union by size and walks to roots without compression.
+- For its optimized extension, use `Kruskal_union_find_list.py`, which additionally compresses paths. The video mentions compression and rank/height but leaves their detailed implementation to FIT3155.
 - For a dense graph already stored as a matrix, use `Prim_matrix.py`, which runs in `O(V^2)` time without sorting all edges.
 - The set-array Kruskal files are retained as teaching versions. Moving the smaller set gives `O(V log V)` total movement across successful unions, but the array union-find is the preferred general implementation.
+
+Complexity details:
+- All standard bounds assume average `O(1)` dictionary/set access and constant-time weight operations. Hash collisions are a separate worst-case issue.
+- Default sorting has worst-case `O(E log E)` time. The optional last-pivot Quicksort has worst-case `O(E^2)`; replace the sorting term accordingly.
+- Set-array/Python-set Kruskal: list `O(V + E log E + V log V)`; matrix `O(V^2 + E log E + V log V)`.
+- Size-only parent-array Kruskal follows the FIT1008 ADT accounting used in the lecture: `same_set` performs Find for up to `E` edge checks, and each of at most `V - 1` successful `union(u, v)` calls performs Find again internally. List: `O(V + E + E log E + E log V + V log V)`; matrix: `O(V^2 + E log E + E log V + V log V)`. These simplify to `O(E log V)` and `O(V^2 + E log V)` respectively for connected simple graphs.
+- Size/rank + compression: initialization and component operations `O(V + E alpha(V))`, PLUS collecting and sorting edges.
+- Amortized bounds constrain the entire operation sequence; they are not average-case bounds over random inputs. Only linking roots already found is `O(1)`; a full union includes finds.
+- All Kruskal versions use `O(V + E)` auxiliary space. Total space is `O(V + E)` for lists and `O(V^2)` for matrices.
+
+Validation: `python -B -m unittest Graph.Minimum_spanning_tree.test_mst_variants -v`.
 
 ## Union Find
 
@@ -123,4 +144,6 @@ Purpose: track connected components and detect cycles.
 Files:
 - `Union_find/Disjoint_set.py`: dictionary parent + rank.
 - `Union_find/Set_array_disjoint_set.py`: lecture-style set array + map array.
-- `Union_find/Array_union_find.py`: parent array with negative size at roots.
+- `Union_find/Python_set_disjoint_set.py`: Python sets + direct component map.
+- `Union_find/Array_union_find_no_compression.py`: lecture's size-based parent array, iterative root walking, no compression.
+- `Union_find/Array_union_find.py`: parent array with negative size at roots, plus path compression.

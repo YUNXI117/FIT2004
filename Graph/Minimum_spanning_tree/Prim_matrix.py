@@ -10,10 +10,18 @@ from Graph.Representation.Adjacency_matrix import AdjacencyMatrixGraph
 
 
 # Prim's Algorithm with adjacency matrix
+# Representation/queue extension: the video (~15:18--21:20) explains the
+# Dijkstra-like Prim update and heap bound; this file uses a linear minimum scan.
 # Purpose: minimum spanning tree (MST)
 # Requirement: graph must be connected and undirected.
+# Negative/zero weights are valid. Membership in visited prevents cycles.
+# min_weight[v] is the lightest single edge from the current tree to v,
+# NOT the sum of a path from the start vertex. parent[v] records that edge.
+# Picking the smallest candidate is a safe cut edge: selected edges remain
+# contained in some MST. Equal-weight choices need not give the same MST.
 #
 # Time Complexity: O(V^2)
+#   Assume average O(1) dictionary/set access and O(1) weight operations.
 #   We repeat V times.
 #   Each time, we scan all vertices to find the unvisited vertex with the
 #   smallest edge weight connecting it to the current MST.
@@ -29,6 +37,8 @@ from Graph.Representation.Adjacency_matrix import AdjacencyMatrixGraph
 #   mst_edges stores V - 1 edges.
 #
 # Total Space: O(V^2)
+# Input is unchanged; empty graph returns ([], 0). Disconnected/directed graphs
+# raise ValueError; an unknown start_key raises KeyError.
 def prim_mst_matrix(graph, start_key=None):
     if graph.directed:
         raise ValueError("Prim's algorithm only works on undirected graphs.")

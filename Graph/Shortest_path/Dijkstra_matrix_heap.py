@@ -21,6 +21,10 @@ from Graph.Representation.Adjacency_matrix import AdjacencyMatrixGraph
 # Time Complexity: O(V^2 + E log V)
 #   Matrix scanning:
 #     Each finalized vertex scans one full matrix row: O(V).
+#     In the code, this is the loop:
+#       for to_index in range(len(graph.vertices)):
+#           weight = graph.matrix[current_index][to_index]
+#     It checks every possible destination column, including None entries.
 #     At most V vertices are finalized, so matrix scanning costs O(V^2).
 #   Heap operations:
 #     Each successful edge relaxation can push one heap entry.

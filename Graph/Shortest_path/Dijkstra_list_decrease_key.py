@@ -111,12 +111,12 @@ class MinHeap:
 # Main idea:
 #   distance[key] stores the best distance found so far from start_key to key.
 #   previous[key] stores the vertex before key on the shortest path.
-#   visited stores vertices whose shortest distance is already finalized.
-#   min_heap stores each unvisited discovered vertex at most once.
+#   A vertex is finalized once it has been served from min_heap.
+#   min_heap starts with every vertex, keyed by its current distance estimate.
 #   min_heap.index_map tells us where each vertex is inside the heap array.
 #
 # Time Complexity: O((V + E) log V)
-#   Each vertex is inserted into the heap at most once: O(V log V).
+#   Each vertex is inserted into the heap once: O(V log V).
 #   Each vertex is served from the heap at most once: O(V log V).
 #   Each successful relaxation can call decrease_key: O(E log V).
 #
@@ -126,7 +126,6 @@ class MinHeap:
 # Auxiliary Space: O(V)
 #   distance stores at most V entries.
 #   previous stores at most V entries.
-#   visited stores at most V entries.
 #   min_heap stores each vertex at most once.
 #   min_heap.index_map stores at most V entries.
 #
@@ -142,15 +141,19 @@ def dijkstra_decrease_key(graph, start_key):
         distance[key] = inf
         previous[key] = None
 
-    visited = set()
     min_heap = MinHeap()
 
     distance[start_key] = 0
-    min_heap.insert(start_key, 0)
+
+    for key in graph.vertices:
+        min_heap.insert(key, distance[key])
 
     while not min_heap.is_empty():
         current_distance, current_key = min_heap.serve()
-        visited.add(current_key)
+
+        if current_distance == inf:
+            break
+
         current_vertex = graph.vertices[current_key]
 
         for edge in current_vertex.edges:
@@ -159,7 +162,7 @@ def dijkstra_decrease_key(graph, start_key):
 
             neighbour = edge.to_vertex
 
-            if neighbour.key in visited:
+            if not min_heap.contains(neighbour.key):
                 continue
 
             new_distance = current_distance + edge.weight
@@ -167,11 +170,7 @@ def dijkstra_decrease_key(graph, start_key):
             if new_distance < distance[neighbour.key]:
                 distance[neighbour.key] = new_distance
                 previous[neighbour.key] = current_key
-
-                if min_heap.contains(neighbour.key):
-                    min_heap.decrease_key(neighbour.key, new_distance)
-                else:
-                    min_heap.insert(neighbour.key, new_distance)
+                min_heap.decrease_key(neighbour.key, new_distance)
 
     return distance, previous
 
